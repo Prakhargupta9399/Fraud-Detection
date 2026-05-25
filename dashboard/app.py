@@ -1,26 +1,38 @@
 
-import streamlit as st
+import pathlib
 import pandas as pd
-import numpy as np
-import pickle, os, shap
-import plotly.express as px
-import matplotlib.pyplot as plt
+import streamlit as str
+from turtle import st
 
-st.set_page_config(page_title="FraudOps", layout="wide")
-
+# 1. Securely load the data without path errors
 @st.cache_data
 def load_data():
-    return pd.read_csv("dashboard/test_results.csv")
+    # Finds the absolute path of the folder where app.py lives
+    current_dir = pathlib.Path(__file__).parent.resolve()
 
-@st.cache_resource
-def load_model():
-    with open("dashboard/model.pkl", "rb") as f:
-        return pickle.load(f)
+    # Targets the test_results.csv file inside that same folder
+    csv_path = current_dir / "test_results.csv"
 
-df    = load_data()
-model = load_model()
+    # Reads the CSV
+    return pd.read_csv(csv_path)
 
-# Sidebar Setup
+
+# 2. App Layout and Logic
+st.title("🛡️ Fraud Detection Dashboard")
+
+try:
+    # Call the load data function
+    df = load_data()
+
+    # Quick preview of the data to ensure it works
+    st.success("Data loaded successfully!")
+    st.write("### Data Preview", df.head())
+
+# Friendly error fallback just in case the CSV is missing entirely
+except FileNotFoundError:
+    st. error(
+        "CRITICAL ERROR: 'test_results.csv' could not be found. Please ensure it is placed in the same folder as 'app.py'."
+    )
 with st.sidebar:
     st.title("FraudOps")
     page       = st.radio("Navigate", ["Overview", "Transaction Explorer", "SHAP Explainer"])
