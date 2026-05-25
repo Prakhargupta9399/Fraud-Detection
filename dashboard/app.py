@@ -1,42 +1,50 @@
-import os
 import pathlib
 import pandas as pd
 import streamlit as st
 
-# 1. Setup the UI layout first
+# Set page configurations
+st.set_page_config(page_title="FraudOps Dashboard", page_icon="🛡️", layout="wide")
+
+# App Header & Navigation Links
 st.title("🛡️ Fraud Detection Dashboard")
 
-# 2. Securely load the data with path debugging built-in
+# FIX: This makes your live link clickable on the web app!
+st. markdown(
+    "The operational application is fully deployed and accessible on the web."
+    "[👉 Click Here to Open the Live FraudOps Dashboard](https://blbcwb9fpesnqtvttdg8mc.streamlit.app/)"
+)
+st.write("---")
+
+
+# Securely load the data from the dashboard directory
 @st.cache_data
 def load_data():
     current_dir = pathlib.Path(__file__).parent.resolve()
     csv_path = current_dir / "test_results.csv"
-
-    # --- DEBUGGING INFORMATION ---
-    st.write("### 🔍 Path Debugger")
-    st.write(f"**Python is looking in this folder:** `{current_dir}`")
-    st.write(f"**Expected full path to CSV file:** `{csv_path}`")
-
-    # Check if the directory exists and list its files
-    if current_dir.exists():
-        st.write("**Actual files found in this folder:**", os.listdir(current_dir))
-    else:
-        st.write(" Directory does not exist!")
-    st.write("---")
-   
-
     return pd.read_csv(csv_path)
 
 
-# 3. Execution Block
+# App Main Logic
 try:
     df = load_data()
-    st.success("🎉 Data loaded successfully!")
-    st.write("### Data Preview", df.head())
 
-except FileNotFoundError:
-    st.error(
-        "CRITICAL ERROR: 'test_results.csv' could not be found. Look at the Path Debugger above to see what is missing."
-    )
+    # Success metric cards or summary
+    st.success("🎉 Data connection active. System status: Operational.")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric(label="Total Transactions Evaluated", value=len(df))
+    with col2:
+        # Assumes you have a column tracking fraud; adjusts if your column name is different
+        if "is_fraud" in df.columns:
+            fraud_count = df["is_fraud"].sum()
+            st.metric(label="Flagged Fraud Cases", value=int(fraud_count))
+
+    # Data Preview Section
+    st.write("### 📊 Live FraudOps Data Stream")
+    st.dataframe(df.head(10), use_container_width=True)
+
 except Exception as e:
-    st.error(f" An unexpected error occurred: {e}")
+    st.error(
+        f"⚠️ System Error: Could not parse database. Technical details: {e}"
+    )
