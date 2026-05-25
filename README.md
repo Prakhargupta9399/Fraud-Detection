@@ -4,7 +4,7 @@ An interactive machine learning solution tracking dynamic real-time transaction 
 
 ## 🚀 Live Deployment Link
 The operational application is fully deployed and accessible on the web:
-👉 **[Click Here to Open the Live FraudOps Dashboard](YOUR_STREAMLIT_COMMUNITY_CLOUD_URL_HERE)**
+👉 **[Click Here to Open the Live FraudOps Dashboard]([YOUR_STREAMLIT_COMMUNITY_CLOUD_URL_HERE](https://blbcwb9fpesnqtvttdg8mc.streamlit.app/))
 
 ## 📁 Repository Structure
 - `dashboard/app.py`: Core Streamlit layout engine.
