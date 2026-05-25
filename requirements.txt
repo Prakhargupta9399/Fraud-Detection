@@ -1,0 +1,16 @@
+streamlit
+pandas
+numpy
+plotly
+matplotlib
+shap
+lightgbm
+scikit-learn>=1.4.0
+imbalanced-learn>=0.12.0
+xgboost>=2.0.0
+optuna>=3.6.0
+
+
+
+
+
